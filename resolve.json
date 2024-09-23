@@ -26,8 +26,8 @@
     {
         "name": "zlib-source",
         "resolver": "git",
-        "method": "checkout",
-        "checkout": "51b7f2abdade71cd9bb0e7a373ef2610ec6f9daf",
-        "source": "github.com/madler/zlib.git"
+        "method": "semver",
+        "major": 2,
+        "source": "github.com/zlib-ng/zlib-ng.git"
     }
 ]

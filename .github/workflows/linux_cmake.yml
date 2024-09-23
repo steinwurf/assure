@@ -26,13 +26,25 @@ jobs:
       matrix:
         config:
           - container: ghcr.io/steinwurf/ubuntu-lts-2404:2.0.0
+            name: Cmake (GCC) Latest (Debug)
+            cxx: g++
+            cc: gcc
+            extra_args: -DCMAKE_BUILD_TYPE=Debug
+          - container: ghcr.io/steinwurf/ubuntu-lts-2404:2.0.0
+            name: Cmake (Clang) Latest (Debug)
+            cxx: clang++
+            cc: clang
+            extra_args: -DCMAKE_BUILD_TYPE=Debug
+          - container: ghcr.io/steinwurf/ubuntu-lts-2404:2.0.0
             name: Cmake (GCC) Latest
             cxx: g++
             cc: gcc
+            extra_args:
           - container: ghcr.io/steinwurf/ubuntu-lts-2404:2.0.0
             name: Cmake (Clang) Latest
             cxx: clang++
             cc: clang
+            extra_args:
     runs-on:
       - self-hosted
       - docker
@@ -58,7 +70,7 @@ jobs:
         with:
           max_attempts: 3
           timeout_minutes: 15
-          command: cd build && cmake ../ -DSTEINWURF_RESOLVE_OPTIONS="--git_protocol=git@ $EXTRA_RESOLVE_OPTIONS" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_BUILD_TYPE=Debug
+          command: cd build && cmake ../ -DSTEINWURF_RESOLVE_OPTIONS="--git_protocol=git@ $EXTRA_RESOLVE_OPTIONS" -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} {{ matrix.config.extra_args }}
       - name: CMake Build
         working-directory: ${{github.workspace}}/build
         run: cmake --build . -j$(((`nproc` + 1) / 2))

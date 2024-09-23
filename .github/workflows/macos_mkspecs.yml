@@ -20,7 +20,12 @@ jobs:
         config:
           - arch: ARM64
             os: big_sur
+            name: Apple Big Sur (ARM) (Debug)
+            extra_args: --cxx_debug
+          - arch: ARM64
+            os: big_sur
             name: Apple Big Sur (ARM)
+            extra_args:
     runs-on: [self-hosted, macOS, "${{ matrix.config.os }}", "${{ matrix.config.arch }}", builder]
     name: ${{ matrix.config.name }}
     steps:
@@ -36,7 +41,7 @@ jobs:
         with:
           max_attempts: 3
           timeout_minutes: 15
-          command: python3 waf configure --git_protocol=git@ ${{ env.EXTRA_RESOLVE_OPTIONS }}
+          command: python3 waf configure --git_protocol=git@ ${{ env.EXTRA_RESOLVE_OPTIONS }} ${{ matrix.config.extra_args }}
       - name: Build
         run: |
           echo "::add-matcher::.github/gcc-problem-matcher.json"

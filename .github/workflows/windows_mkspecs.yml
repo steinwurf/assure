@@ -20,6 +20,10 @@ jobs:
         config:
           - cxx_mkspec: cxx_msvc17_x64
             name: MSVC 17 64-bit
+            extra_args:
+          - cxx_mkspec: cxx_msvc17_x64
+            name: MSVC 17 64-bit (Debug)
+            extra_args: --cxx_debug
     runs-on: [self-hosted, "${{ matrix.config.cxx_mkspec }}", builder]
     name: ${{ matrix.config.name }}
     steps:
@@ -33,7 +37,7 @@ jobs:
         with:
           max_attempts: 3
           timeout_minutes: 15
-          command: python waf configure --git_protocol=git@ --cxx_mkspec=${{ matrix.config.cxx_mkspec }} ${{ env.EXTRA_RESOLVE_OPTIONS }}
+          command: python waf configure --git_protocol=git@ --cxx_mkspec=${{ matrix.config.cxx_mkspec }} ${{ matrix.conf.extra_args }} ${{ env.EXTRA_RESOLVE_OPTIONS }}
       - name: Build
         run: |
           echo "::add-matcher::.github/gcc-problem-matcher.json"

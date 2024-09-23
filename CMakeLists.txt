@@ -61,10 +61,14 @@ install(
     PATTERN *.hpp)
 
 if(STEINWURF_VERIFY_USE_LIBASSERT)
-    if (NOT TARGET ZLIB::ZLIB)
-        find_package(ZLIB)
-        if (NOT ZLIB_FOUND)
-            set(ZLIB_BUILD_EXAMPLES NO)
+    if(NOT TARGET ZLIB::ZLIB)
+        if(FALSE)
+            # There's some strangeness compiling this ourselves on MacOS
+            find_package(ZLIB REQUIRED)
+        else()
+            set(ZLIB_COMPAT YES)
+            set(ZLIB_ENABLE_TESTS NO)
+            set(ZLIBNG_ENABLE_TESTS NO)
             add_subdirectory("${STEINWURF_RESOLVE}/zlib-source" zlib EXCLUDE_FROM_ALL)
         endif()
     endif()
@@ -103,14 +107,8 @@ if (${PROJECT_NAME} STREQUAL ${STEINWURF_TOP_NAME})
 
     if (MSVC)
         add_compile_options(/W4)
-        # Make Release builds explicitly keep NDEBUG unset.
-        string(REGEX REPLACE "/DNDEBUG" "" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
-        string(REGEX REPLACE "/DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
     else()
         add_compile_options(-Wall -Wextra -Wpedantic -Werror)
-        # Make Release builds explicitly keep NDEBUG unset.
-        string(REGEX REPLACE "-DNDEBUG" "" CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
-        string(REGEX REPLACE "-DNDEBUG" "" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
     endif()
 
     add_test(verify_tests verify_tests)

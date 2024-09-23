@@ -23,7 +23,11 @@ jobs:
           - arch: ARM64
             os: big_sur
             name: Apple Big Sur (ARM)
-
+            extra_args:
+          - arch: ARM64
+            os: big_sur
+            name: Apple Big Sur (ARM) (Debug)
+            extra_args: -DCMAKE_BUILD_TYPE=Debug
     runs-on: [self-hosted, macOS, "${{ matrix.config.os }}", "${{ matrix.config.arch }}", cmake, builder]
     name: ${{ matrix.config.name }}
     steps:
@@ -44,7 +48,7 @@ jobs:
         with:
           max_attempts: 3
           timeout_minutes: 15
-          command: cd build && cmake ${{github.workspace}} -DSTEINWURF_RESOLVE_OPTIONS="--git_protocol=git@ $EXTRA_RESOLVE_OPTIONS" -DCMAKE_BUILD_TYPE=Debug
+          command: cd build && cmake ${{github.workspace}} -DSTEINWURF_RESOLVE_OPTIONS="--git_protocol=git@ $EXTRA_RESOLVE_OPTIONS" ${{ matrix.config.extra_args }}
       - name: CMake Build
         working-directory: ${{github.workspace}}/build
         run: cmake --build . -j

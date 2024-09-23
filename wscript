@@ -216,7 +216,9 @@ def CMakeBuildTask(task):
     flags += [
         f"-DCMAKE_BUILD_TYPE={CMAKE_BUILD_TYPE}",
         f"-DCMAKE_INSTALL_PREFIX={install_dir}",
-        f"-DZLIB_BUILD_EXAMPLES=NO",
+        f"-DZLIB_COMPAT=YES",
+        f"-DZLIB_ENABLE_TESTS=NO",
+        f"-DZLIBNG_ENABLE_TESTS=NO",
     ]
     flags = " ".join(flags)
 

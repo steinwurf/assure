@@ -19,14 +19,24 @@ jobs:
       matrix:
         config:
           - container: ghcr.io/steinwurf/ubuntu-lts-2404:2.0.0
-            CXX: g++
             name: GCC Latest
+            CXX: g++
             cxx_mkspec:
             env:
           - container: ghcr.io/steinwurf/ubuntu-lts-2404:2.0.0
             name: Clang Latest
             CXX: clang++
             cxx_mkspec:
+            env:
+          - container: ghcr.io/steinwurf/ubuntu-lts-2404:2.0.0
+            name: GCC Latest (Debug)
+            CXX: g++
+            cxx_mkspec: --cxx_debug
+            env:
+          - container: ghcr.io/steinwurf/ubuntu-lts-2404:2.0.0
+            name: Clang Latest (Debug)
+            CXX: clang++
+            cxx_mkspec: --cxx_debug
             env:
     runs-on:
       - self-hosted

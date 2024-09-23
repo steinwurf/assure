@@ -8,6 +8,8 @@ TEST(test_verify, simple) {
   VERIFY(a == 42);
   VERIFY(a = 21);
   VERIFY(a == 21);
+  (void)a; // Make compilers happy when the variable goes unused when VERIFY is
+           // compiled out.
 }
 
 TEST(test_verify, complex) {
@@ -15,6 +17,8 @@ TEST(test_verify, complex) {
   auto it = example_map.find("foo");
   VERIFY(it != example_map.cend(), "expected key not found", example_map,
          "hello", "world");
+  (void)it; // Make compilers happy when the variable goes unused when VERIFY is
+            // compiled out.
 }
 
 void trigger_verify() {
@@ -22,6 +26,8 @@ void trigger_verify() {
   auto it = example_map.find("bar");
   VERIFY(it != example_map.cend(), "expected key not found", example_map,
          "hello", "world");
+  (void)it; // Make compilers happy when the variable goes unused when VERIFY is
+            // compiled out.
 }
 
 TEST(test_verify, failing) {
